@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/outraActivityMenuItem"
+        android:title="Outra Activity"
+        app:showAsAction="never"
+    />
+
+    <item
+        android:title="Outras Inents"
+        app:showAsAction="never" >
+        <menu>
+            <item
+                android:id="@+id/viewMenuItem"
+                android:title="Navegador"
+            />
+            <item
+                android:id="@+id/ligacaoItem"
+                android:title="Ligação"
+            />
+            <item
+                android:id="@+id/discadorMenuItem"
+                android:title="Discador"
+            />
+            <item
+                android:id="@+id/pickMenuItem"
+                android:title="Pegar Arquivo"
+            />
+            <item
+                android:id="@+id/chooseMenuItem"
+                android:title="Escolher"
+            />
+        </menu>
+    </item>
+</menu>
