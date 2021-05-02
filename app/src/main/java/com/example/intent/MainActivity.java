@@ -1,9 +1,14 @@
 package com.example.intent;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     public ActivityMainBinding activityMainBinding;
 
     public static final String PARAMETRO = "PARAMETRO";
+
+    private final int OUTRA_ACTIVITY_REQUEST_CODE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,17 +77,58 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.outraActivityMenuItem:
-                Intent outraActivityIntent = new Intent(this, OutraActivity.class);
+                //Intent outraActivityIntent = new Intent(this, OutraActivity.class);
+                Intent outraActivityIntent = new Intent("RECEBER_E_RETORNAR_ACTION");
 
-                Bundle bundle = new Bundle();
-                bundle.putString(PARAMETRO, activityMainBinding.parametroEt.getText().toString());
-                outraActivityIntent.putExtras(bundle);
+                //passagem de forma 1
+                //Bundle parametrosBundle = new Bundle();
+                //parametrosBundle.putString(PARAMETRO, activityMainBinding.parametroEt.getText().toString());
+                //outraActivityIntent.putExtras(parametrosBundle);
 
-                startActivity(outraActivityIntent);
+                //passagem de forma 2
+                outraActivityIntent.putExtra(PARAMETRO, activityMainBinding.parametroEt.getText().toString());
+
+                startActivityForResult(outraActivityIntent, OUTRA_ACTIVITY_REQUEST_CODE);
                 return true;
             case R.id.viewMenuItem:
+                Intent abrirNavegadorIntent = new Intent(Intent.ACTION_VIEW);
+                abrirNavegadorIntent.setData(Uri.parse("https://sptfy.com/5Psb"));
+                startActivity(abrirNavegadorIntent);
+
+                return true;
+            case R.id.ligacaoItem:
+                verifyCallPhonePermission();
+
                 return true;
         }
         return false;
+    }
+
+    private void verifyCallPhonePermission(){
+        Intent ligarIntent = new Intent(Intent.ACTION_CALL);
+        ligarIntent.setData(Uri.parse("tel: " + activityMainBinding.parametroEt.getText().toString()));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (PackageManager.PERMISSION_GRANTED == checkSelfPermission(Manifest.permission.CALL_PHONE)) {
+                startActivity(ligarIntent);
+            } else {
+                //Solicitando permissão em tempo de execução
+
+            }
+        } else {
+            startActivity(ligarIntent);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == OUTRA_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK ){
+            String retorno = data.getStringExtra(OutraActivity.RETORNO);
+            if (retorno != null){
+                activityMainBinding.retornoTv.setText(retorno);
+            }
+        }
     }
 }

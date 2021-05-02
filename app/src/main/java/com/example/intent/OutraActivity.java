@@ -2,6 +2,7 @@ package com.example.intent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +12,7 @@ import com.example.intent.databinding.ActivityOutraBinding;
 public class OutraActivity extends AppCompatActivity {
     private ActivityOutraBinding activityOutraBinding;
 
-    public static final String PARAMETRO = "PARAMETRO";
+    public static final String RETORNO = "RETORNO";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,9 +20,16 @@ public class OutraActivity extends AppCompatActivity {
         activityOutraBinding = ActivityOutraBinding.inflate(getLayoutInflater());
         setContentView(activityOutraBinding.getRoot());
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null){
-            String parametro = bundle.getString(MainActivity.PARAMETRO, "");
+        //recebendo da forma 1
+        //Bundle bundle = getIntent().getExtras();
+        //if (bundle != null){
+        //    String parametro = bundle.getString(MainActivity.PARAMETRO, "");
+        //    activityOutraBinding.recebidoTv.setText(parametro);
+        //}
+
+        //recebendo da forma 2
+        String parametro = getIntent().getStringExtra(MainActivity.PARAMETRO);
+        if (parametro != null){
             activityOutraBinding.recebidoTv.setText(parametro);
         }
 
@@ -59,6 +67,10 @@ public class OutraActivity extends AppCompatActivity {
     }
 
     public void onClick(View view){
+        Intent retornoIntent = new Intent();
+        retornoIntent.putExtra(RETORNO, activityOutraBinding.retornoEt.getText().toString());
+        setResult(RESULT_OK, retornoIntent);
+
         finish();
     }
 }
