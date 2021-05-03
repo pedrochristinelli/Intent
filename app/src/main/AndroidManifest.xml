@@ -4,6 +4,7 @@
 
     <!-- permicoes abaixo do marshmallow eram feitas no manifest-->
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- fim das permicoes-->
 
     <application
